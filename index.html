@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="https://cdn.jsdelivr.net/vue.resource/1.3.1/vue-resource.min.js"></script>
+        <title>Geografía </title>
+    </head>
+    <body>
+        <form id="form">
+            <select id= "provincia" name="provincia" required> <!--onchangecantones()-->
+                <option value="">Escoja una provincia</option>
+                <option v-for="provincia in provincias" value="{{provincia.id}}">
+                    {{provincia.nombre}}
+                </option>
+            </select>
+        </form>
+        <script>
+            var form = new Vue({
+                el: '#form',
+                data :{
+                    provincias: []
+                },
+                created: function(){
+                        this.$http.get('provincias.php').then(function(response){
+                        this.provincias = response.body;
+                        console.log(this.provincias);
+                    }, function(){
+                        alert('Error!');
+                    });
+                }
+            });
+
+            /*function cantones(){
+                form.$http.post("cantones.php",
+                {
+                    provincia: provincia
+                }).then(function(response){
+                    this.cantones = response.body;
+                }, function(){
+                    alert('Error!');
+                });
+            }*/
+        </script>
+    </body>
+</html>
