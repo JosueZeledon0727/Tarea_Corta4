@@ -6,39 +6,45 @@
     </head>
     <body>
         <form id="form">
-            <select id= "provincia" name="provincia" required> <!--onchangecantones()-->
+            <select id= "provincia" name="provincia" onchange="cantones(this.options[this.selectedIndex].value);" required> 
                 <option value="">Escoja una provincia</option>
                 <option v-for="provincia in provincias" value="{{provincia.id}}">
                     {{provincia.nombre}}
                 </option>
+            </select><br />
+            <select id="canton" name="canton" onchange="provincia=document.getElementById('provincia');distritos(provincia.options[provincia.selectedIndex].value, this.options[this.selectedIndex].value);" required>
+                <option value="">Escoja un cantón</option>
+                <option v-for="canton in cantones" v-bind:value="canton.id">{{canton.nombre}}</option>
             </select>
         </form>
         <script>
             var form = new Vue({
                 el: '#form',
                 data :{
-                    provincias: []
+                    provincias: [],
+                    cantones: [],
+                    distritos: []
                 },
                 created: function(){
                         this.$http.get('provincias.php').then(function(response){
                         this.provincias = response.body;
-                        console.log(this.provincias);
                     }, function(){
                         alert('Error!');
                     });
                 }
             });
 
-            /*function cantones(){
+            function cantones(){
                 form.$http.post("cantones.php",
                 {
-                    provincia: provincia
-                }).then(function(response){
-                    this.cantones = response.body;
+                    id: id
+                }
+                ).then(function(response){
+                    form.cantones = response.body;
                 }, function(){
                     alert('Error!');
                 });
-            }*/
+            }
         </script>
     </body>
 </html>
