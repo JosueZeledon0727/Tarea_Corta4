@@ -16,9 +16,15 @@
                 
             </select> <br />
 	    <br />
+	    <h2> Cantones: </h2>
             <select id="canton" name="canton" onchange="provincia=document.getElementById('provincia'); distritos(provincia.options[provincia.selectedIndex].value, this.options[this.selectedIndex].value);" required>
                 <option value="">Escoja un canton</option>
                 <option v-for="canton in cantones" v-bind:value="canton.id">{{canton.nombre}}</option>
+            </select>
+        <h2> Distritos: </h2>
+            <select id="distrito" name="distrito" required>
+                <option value="">Escoja un distrito</option>
+                <option v-for="distrito in distritos" v-bind:value="distrito.id">{{distrito.nombre}}</option>
             </select>
         </form>
         <script>
@@ -50,6 +56,18 @@
                     alert('Error!');
                 });
           }
+          function distritos(id, cid) {
+			  form.$http.post('distritos.php', 
+                    {
+                        id: id,
+                        cid:cid
+                    }
+              ).then(function(response){
+				  form.distritos = response.body;
+			  }, function(){
+				  alert('Error!');
+			  });
+		  }
         </script>
     </body>
 </html>
